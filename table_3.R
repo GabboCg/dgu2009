@@ -15,8 +15,7 @@
 # ======================================================== #
 
 # Replication of Table 3 from DeMiguel, Garlappi, Uppal (RFS, 2009)
-# "Optimal Versus Naive Diversification: How Inefficient is the 1/N
-#  Portfolio Strategy?"
+# "Optimal Versus Naive Diversification: How Inefficient is the 1/N Portfolio Strategy?"
 #
 # Table 3: Sharpe ratios for empirical data
 # Settings: M = 120 months estimation window, gamma = 1, rolling window
@@ -25,18 +24,18 @@
 library(quadprog)
 
 # ==========================================
-#               CONFIGURATION
+#               Configuration
 # ------------------------------------------
 
 DATA_DIR <- "data"
-M_WINDOW <- 120        # estimation window length
-GAMMA    <- 1          # risk aversion coefficient
+M_WINDOW <- 120 # estimation window length
+GAMMA <- 1      # risk aversion coefficient
 
 # Dataset names (correspond to .rds files in data/)
 DATASET_NAMES <- c("SPSectors", "Industry", "International", "MKT_SMB_HML", "FF_1factor", "FF_4factor")
 
 # ==========================================
-#               HELPER FUNCTIONS
+#               Helper Functions
 # ------------------------------------------
 
 load_data <- function(ds_name) {
@@ -286,7 +285,7 @@ in_sample_sr <- function(rRisky, M, nRisky, n, gamma) {
 }
 
 # ==========================================
-#            MAIN ANALYSIS FUNCTION
+#            Main Analysis Function
 # ------------------------------------------
 
 run_analysis <- function(ds_name, M = M_WINDOW, gamma = GAMMA) {
@@ -303,8 +302,7 @@ run_analysis <- function(ds_name, M = M_WINDOW, gamma = GAMMA) {
   nPoints   <- M  # estimation window size
 
   # Strategy names
-  strat_names <- c("ew", "mv", "bs", "min", "vw", "mp",
-                    "mv_c", "bs_c", "min_c", "g_min_c", "mv_min", "ew_min")
+  strat_names <- c("ew", "mv", "bs", "min", "vw", "mp", "mv_c", "bs_c", "min_c", "g_min_c", "mv_min", "ew_min")
   if (nFactors > 0) strat_names <- c(strat_names, "dm")
 
   # Storage for out-of-sample excess returns (risky-only)
@@ -478,7 +476,7 @@ run_analysis <- function(ds_name, M = M_WINDOW, gamma = GAMMA) {
 }
 
 # ==========================================
-#               RUN ALL DATASETS
+#               Run All Datasets
 # ------------------------------------------
 
 cat("=================================================================\n")
@@ -511,7 +509,7 @@ for (ds_name in DATASET_NAMES) {
 }
 
 # ==========================================
-#         FORMAT AND DISPLAY TABLE 3
+#         Format and Display Table 3
 # ------------------------------------------
 
 # Map strategy codes to paper labels
