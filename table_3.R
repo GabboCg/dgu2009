@@ -20,7 +20,7 @@
 # Table 3: Sharpe ratios for empirical data
 # Settings: M = 120 months estimation window, gamma = 1, rolling window
 
-# Read packages
+# Load packages
 library(quadprog)
 
 # ==========================================
@@ -220,14 +220,14 @@ pastor_dm <- function(rRisky_noFac, rFactor, sigma_alpha_annual) {
   b_val <- (TT + 1) / (TT - k - 2)
   h_val <- TT / (TT - m - k - 1)
 
-  # Regression WITH intercept
+  # --- Regression WITH intercept ---
   X_int <- cbind(1, rFactor)
   beta_h <- solve(crossprod(X_int), crossprod(X_int, rRisky_noFac))
   R <- rRisky_noFac - X_int %*% beta_h
   beta_hat <- t(beta_h[2:(k + 1), , drop = FALSE])
   Sigma_hat <- cov(R)
 
-  # Regression WITHOUT intercept
+  # --- Regression WITHOUT intercept ---
   beta_bar_raw <- solve(crossprod(rFactor), crossprod(rFactor, rRisky_noFac))
   R1 <- rRisky_noFac - rFactor %*% beta_bar_raw
   beta_bar <- t(beta_bar_raw)
@@ -271,11 +271,14 @@ in_sample_sr <- function(rRisky, M, nRisky, n, gamma) {
   risky <- rRisky[(M + 1):nrow(rRisky),]
   nPoints <- nrow(risky)
   mu <- colMeans(risky)
-  # Unbiased estimator of Sigma
+  
+  # --- Unbiased estimator of Sigma ---
   Sigma <- cov(risky) * (nPoints - 1) / (nPoints - nRisky - 2)
   invSigma <- solve(Sigma)
-  # MV weights
+  
+  # --- MV weights ---
   w_mv <- drop((1 / gamma) * invSigma %*% mu)
+  
   # Risky-only: divide by sum (not abs(sum))
   w_ro <- w_mv / sum(w_mv)
   mn_is <- drop(crossprod(w_ro, mu))
@@ -299,7 +302,7 @@ run_analysis <- function(ds_name, M = M_WINDOW, gamma = GAMMA) {
   nFactors  <- dat$nFactors
   TT        <- nrow(rRisky)
   nSubsets  <- TT - M
-  nPoints   <- M  # estimation window size
+  nPoints   <- M # estimation window size
 
   # Strategy names
   strat_names <- c("ew", "mv", "bs", "min", "vw", "mp", "mv_c", "bs_c", "min_c", "g_min_c", "mv_min", "ew_min")
